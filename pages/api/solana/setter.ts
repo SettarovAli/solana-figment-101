@@ -26,13 +26,21 @@ export default async function setter(
 
     // this your turn to figure out
     // how to create this instruction
-    const instruction = new TransactionInstruction(undefined);
+    const instruction = new TransactionInstruction({
+      programId: programKey,
+      data: Buffer.alloc(0),
+      keys: [{isSigner: false, isWritable: true, pubkey: greeterPublicKey}],
+    });
+
+    const transaction = new Transaction().add(instruction);
 
     // this your turn to figure out
     // how to create this transaction
-    const hash = await sendAndConfirmTransaction(undefined);
+    const hash = await sendAndConfirmTransaction(connection, transaction, [
+      payerKeypair,
+    ]);
 
-    res.status(200).json(undefined);
+    res.status(200).json(hash);
   } catch (error) {
     console.error(error);
     res.status(500).json('Get balance failed');
